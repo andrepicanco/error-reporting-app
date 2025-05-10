@@ -1,9 +1,21 @@
 // Google Sheets API configuration
 const SHEET_NAME = 'ErrorReports';
 
+// Check if configuration is available
+if (typeof CONFIG === 'undefined') {
+    console.error('Configuration not found. Please ensure config.js is loaded correctly.');
+    showError('Application configuration is missing. Please contact support.');
+    throw new Error('Configuration not found');
+}
+
 // Initialize Google API
 async function initGoogleAPI() {
     try {
+        // Validate required configuration
+        if (!CONFIG.apiKey || !CONFIG.clientId || !CONFIG.spreadsheetId) {
+            throw new Error('Missing required configuration');
+        }
+
         // Load the Google API client library
         await new Promise((resolve, reject) => {
             gapi.load('client', resolve);

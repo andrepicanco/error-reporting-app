@@ -8,7 +8,6 @@
     <!-- Google API Scripts -->
     <script src="https://apis.google.com/js/api.js"></script>
     <script src="https://accounts.google.com/gsi/client"></script>
-    <script src="config.js"></script>
 </head>
 <body>
     <div class="container">
@@ -68,6 +67,10 @@
             <button onclick="resetForm()">Submit Another Report</button>
         </div>
     </div>
+
+    <!-- Load configuration first -->
+    <script src="config.js"></script>
+    <!-- Then load our application code -->
     <script src="script.js"></script>
 </body>
 </html> 
