@@ -5,6 +5,9 @@ on:
     branches:
       - main  # or master, depending on your default branch name
 
+permissions:
+  contents: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -46,4 +49,5 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: .
-          publish_branch: gh-pages 
+          publish_branch: gh-pages
+          commit_message: "Deploy: ${{ github.event.head_commit.message }}" 
