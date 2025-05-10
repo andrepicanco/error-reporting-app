@@ -1,5 +1,4 @@
 // Google Sheets API configuration
-const SPREADSHEET_ID = '1MSwtFjeOUQk9yRGfi4SbotKj7Skht-UDNB76lBe--jI';
 const SHEET_NAME = 'ErrorReports';
 
 // Initialize Google API
