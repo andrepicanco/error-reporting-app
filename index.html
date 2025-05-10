@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error Reporting App</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Google API Scripts -->
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script src="https://accounts.google.com/gsi/client"></script>
+    <script src="config.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Error Report</h1>
+        <form id="errorForm">
+            <div class="form-group">
+                <label for="errorTitle">Error Title</label>
+                <input type="text" id="errorTitle" name="errorTitle" required 
+                       placeholder="Brief description of the error">
+            </div>
+
+            <div class="form-group">
+                <label for="errorType">Error Type</label>
+                <select id="errorType" name="errorType" required>
+                    <option value="">Select error type</option>
+                    <option value="credit_score">Credit Score Calculation Error</option>
+                    <option value="document_verification">Document Verification Failure</option>
+                    <option value="risk_assessment">Risk Assessment Error</option>
+                    <option value="data_validation">Data Validation Error</option>
+                    <option value="system_timeout">System Timeout</option>
+                    <option value="api_integration">API Integration Error</option>
+                    <option value="report_generation">Report Generation Error</option>
+                    <option value="user_authentication">User Authentication Error</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" 
+                          placeholder="Please provide detailed information about the error"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="evidence">Evidence</label>
+                <div class="evidence-options">
+                    <div class="option">
+                        <input type="file" id="screenshot" name="screenshot" accept="image/*">
+                        <label for="screenshot" class="file-label">Upload Screenshot</label>
+                    </div>
+                    <div class="option">
+                        <input type="url" id="evidenceUrl" name="evidenceUrl" 
+                               placeholder="Or paste URL here">
+                    </div>
+                </div>
+                <div id="pastedImage" class="pasted-image-container hidden">
+                    <img id="pastedImagePreview" src="" alt="Pasted screenshot">
+                    <button type="button" class="remove-image-btn" onclick="removePastedImage()">Remove</button>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">Submit Report</button>
+        </form>
+
+        <div id="confirmation" class="confirmation hidden">
+            <h2>Thank You!</h2>
+            <p>Your error report has been submitted successfully.</p>
+            <button onclick="resetForm()">Submit Another Report</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html> 
