@@ -55,8 +55,15 @@ jobs:
           echo "config.js contents (without sensitive data):"
           sed 's/apiKey:.*,/apiKey: "***",/' config.js | sed 's/clientId:.*,/clientId: "***",/'
 
-      - name: Debug - List files before deployment
+      - name: Prepare deployment
         run: |
+          # Remove the original .gitignore
+          rm -f .gitignore
+          # Copy the gh-pages specific .gitignore
+          cp .gitignore-gh-pages .gitignore
+          # Ensure config.js is not ignored
+          echo "!config.js" >> .gitignore
+          # List files to be deployed
           echo "Files to be deployed:"
           ls -la
 
