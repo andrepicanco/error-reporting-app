@@ -22,22 +22,24 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Debug - List directory contents
+      - name: Replace environment variables
         run: |
-          echo "Current directory contents:"
-          ls -la
-
-
-          # Replace environment variables in index.html
-          sed -i "s/{{ GOOGLE_API_KEY }}/${{ secrets.GOOGLE_API_KEY }}/g" index.html
-          sed -i "s/{{ GOOGLE_CLIENT_ID }}/${{ secrets.GOOGLE_CLIENT_ID }}/g" index.html
-          sed -i "s/{{ GOOGLE_SPREADSHEET_ID }}/${{ secrets.GOOGLE_SPREADSHEET_ID }}/g" index.html
+          # Create a temporary file
+          cp index.html index.html.tmp
+          
+          # Replace environment variables
+          sed -i "s/{{ GOOGLE_API_KEY }}/${{ secrets.GOOGLE_API_KEY }}/g" index.html.tmp
+          sed -i "s/{{ GOOGLE_CLIENT_ID }}/${{ secrets.GOOGLE_CLIENT_ID }}/g" index.html.tmp
+          sed -i "s/{{ GOOGLE_SPREADSHEET_ID }}/${{ secrets.GOOGLE_SPREADSHEET_ID }}/g" index.html.tmp
           
           # Verify replacements (without showing actual values)
           echo "Environment variables replaced in index.html"
-          grep -q "apiKey:" index.html && echo "✅ API key placeholder found"
-          grep -q "clientId:" index.html && echo "✅ Client ID placeholder found"
-          grep -q "spreadsheetId:" index.html && echo "✅ Spreadsheet ID placeholder found"
+          grep -q "apiKey:" index.html.tmp && echo "✅ API key placeholder found"
+          grep -q "clientId:" index.html.tmp && echo "✅ Client ID placeholder found"
+          grep -q "spreadsheetId:" index.html.tmp && echo "✅ Spreadsheet ID placeholder found"
+          
+          # Move the temporary file back
+          mv index.html.tmp index.html
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
