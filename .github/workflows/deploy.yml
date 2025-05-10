@@ -22,8 +22,14 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Debug - List directory contents
+        run: |
+          echo "Current directory contents:"
+          ls -la
+
       - name: Create config.js
         run: |
+          echo "Creating config.js..."
           cat > config.js << EOL
           const CONFIG = {
             apiKey: '${{ secrets.GOOGLE_API_KEY }}',
@@ -32,17 +38,27 @@ jobs:
             sheetName: 'ErrorReports'
           };
           EOL
+          echo "config.js created"
 
       - name: Verify config.js
         run: |
+          echo "Verifying config.js..."
           if [ ! -f config.js ]; then
-            echo "config.js was not created"
+            echo "ERROR: config.js was not created"
             exit 1
           fi
           if ! grep -q "const CONFIG" config.js; then
-            echo "config.js is not properly formatted"
+            echo "ERROR: config.js is not properly formatted"
             exit 1
           fi
+          echo "config.js verification passed"
+          echo "config.js contents (without sensitive data):"
+          sed 's/apiKey:.*,/apiKey: "***",/' config.js | sed 's/clientId:.*,/clientId: "***",/'
+
+      - name: Debug - List files before deployment
+        run: |
+          echo "Files to be deployed:"
+          ls -la
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
@@ -50,4 +66,5 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: .
           publish_branch: gh-pages
-          commit_message: "Deploy: ${{ github.event.head_commit.message }}" 
+          commit_message: "Deploy: ${{ github.event.head_commit.message }}"
+          force_orphan: true 
