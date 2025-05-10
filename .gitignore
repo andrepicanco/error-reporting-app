@@ -1,10 +1,9 @@
-# Configuration files with sensitive data
-config.js
-
-# Environment files
+# Environment and configuration files
 .env
-.env.local
-.env.*.local
+.env.*
+config.js
+config.prod.js
+*.local
 
 # IDE and editor files
 .vscode/
@@ -19,4 +18,19 @@ config.js
 .Spotlight-V100
 .Trashes
 ehthumbs.db
-Thumbs.db 
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# Build output
+dist/
+build/ 

@@ -27,45 +27,17 @@ jobs:
           echo "Current directory contents:"
           ls -la
 
-      - name: Create config.js
-        run: |
-          echo "Creating config.js..."
-          cat > config.js << EOL
-          const CONFIG = {
-            apiKey: '${{ secrets.GOOGLE_API_KEY }}',
-            clientId: '${{ secrets.GOOGLE_CLIENT_ID }}',
-            spreadsheetId: '${{ secrets.GOOGLE_SPREADSHEET_ID }}',
-            sheetName: 'ErrorReports'
-          };
-          EOL
-          echo "config.js created"
 
-      - name: Verify config.js
-        run: |
-          echo "Verifying config.js..."
-          if [ ! -f config.js ]; then
-            echo "ERROR: config.js was not created"
-            exit 1
-          fi
-          if ! grep -q "const CONFIG" config.js; then
-            echo "ERROR: config.js is not properly formatted"
-            exit 1
-          fi
-          echo "config.js verification passed"
-          echo "config.js contents (without sensitive data):"
-          sed 's/apiKey:.*,/apiKey: "***",/' config.js | sed 's/clientId:.*,/clientId: "***",/'
-
-      - name: Prepare deployment
-        run: |
-          # Remove the original .gitignore
-          rm -f .gitignore
-          # Copy the gh-pages specific .gitignore
-          cp .gitignore-gh-pages .gitignore
-          # Ensure config.js is not ignored
-          echo "!config.js" >> .gitignore
-          # List files to be deployed
-          echo "Files to be deployed:"
-          ls -la
+          # Replace environment variables in index.html
+          sed -i "s/{{ GOOGLE_API_KEY }}/${{ secrets.GOOGLE_API_KEY }}/g" index.html
+          sed -i "s/{{ GOOGLE_CLIENT_ID }}/${{ secrets.GOOGLE_CLIENT_ID }}/g" index.html
+          sed -i "s/{{ GOOGLE_SPREADSHEET_ID }}/${{ secrets.GOOGLE_SPREADSHEET_ID }}/g" index.html
+          
+          # Verify replacements (without showing actual values)
+          echo "Environment variables replaced in index.html"
+          grep -q "apiKey:" index.html && echo "✅ API key placeholder found"
+          grep -q "clientId:" index.html && echo "✅ Client ID placeholder found"
+          grep -q "spreadsheetId:" index.html && echo "✅ Spreadsheet ID placeholder found"
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3

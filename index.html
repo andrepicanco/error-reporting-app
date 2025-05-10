@@ -3,11 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Error Reporting App</title>
+    <title>Error Reporter</title>
     <link rel="stylesheet" href="styles.css">
     <!-- Google API Scripts -->
     <script src="https://apis.google.com/js/api.js"></script>
     <script src="https://accounts.google.com/gsi/client"></script>
+    <script>
+        // Configuration from environment variables
+        const CONFIG = {
+            apiKey: '{{ GOOGLE_API_KEY }}',
+            clientId: '{{ GOOGLE_CLIENT_ID }}',
+            spreadsheetId: '{{ GOOGLE_SPREADSHEET_ID }}',
+            sheetName: 'ErrorReports'
+        };
+    </script>
 </head>
 <body>
     <div class="container">
@@ -67,10 +76,6 @@
             <button onclick="resetForm()">Submit Another Report</button>
         </div>
     </div>
-
-    <!-- Load configuration first -->
-    <script src="config.js"></script>
-    <!-- Then load our application code -->
     <script src="script.js"></script>
 </body>
 </html> 
