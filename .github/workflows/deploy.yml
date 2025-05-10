@@ -22,6 +22,25 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Debug - Check secrets
+        run: |
+          echo "Checking if secrets are set..."
+          if [ -n "${{ secrets.GOOGLE_API_KEY }}" ]; then
+            echo "✅ GOOGLE_API_KEY is set"
+          else
+            echo "❌ GOOGLE_API_KEY is not set"
+          fi
+          if [ -n "${{ secrets.GOOGLE_CLIENT_ID }}" ]; then
+            echo "✅ GOOGLE_CLIENT_ID is set"
+          else
+            echo "❌ GOOGLE_CLIENT_ID is not set"
+          fi
+          if [ -n "${{ secrets.GOOGLE_SPREADSHEET_ID }}" ]; then
+            echo "✅ GOOGLE_SPREADSHEET_ID is set"
+          else
+            echo "❌ GOOGLE_SPREADSHEET_ID is not set"
+          fi
+
       - name: Replace environment variables
         run: |
           # Create a temporary file
@@ -32,11 +51,18 @@ jobs:
           sed -i "s/{{ GOOGLE_CLIENT_ID }}/${{ secrets.GOOGLE_CLIENT_ID }}/g" index.html.tmp
           sed -i "s/{{ GOOGLE_SPREADSHEET_ID }}/${{ secrets.GOOGLE_SPREADSHEET_ID }}/g" index.html.tmp
           
-          # Verify replacements (without showing actual values)
-          echo "Environment variables replaced in index.html"
-          grep -q "apiKey:" index.html.tmp && echo "✅ API key placeholder found"
-          grep -q "clientId:" index.html.tmp && echo "✅ Client ID placeholder found"
-          grep -q "spreadsheetId:" index.html.tmp && echo "✅ Spreadsheet ID placeholder found"
+          # Debug - Check replacements
+          echo "Checking replacements in index.html..."
+          if grep -q "${{ secrets.GOOGLE_API_KEY }}" index.html.tmp; then
+            echo "✅ API key was replaced"
+          else
+            echo "❌ API key was not replaced"
+          fi
+          if grep -q "${{ secrets.GOOGLE_CLIENT_ID }}" index.html.tmp; then
+            echo "✅ Client ID was replaced"
+          else
+            echo "❌ Client ID was not replaced"
+          fi
           
           # Move the temporary file back
           mv index.html.tmp index.html
