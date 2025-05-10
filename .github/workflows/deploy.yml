@@ -19,6 +19,15 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Create config.js
+        run: |
+          echo "const CONFIG = {
+            apiKey: '${{ secrets.GOOGLE_API_KEY }}',
+            clientId: '${{ secrets.GOOGLE_CLIENT_ID }}',
+            spreadsheetId: '${{ secrets.GOOGLE_SPREADSHEET_ID }}',
+            sheetName: 'ErrorReports'
+          };" > config.js
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:

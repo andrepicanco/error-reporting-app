@@ -195,6 +195,27 @@ select:focus {
     background-color: #d32f2f;
 }
 
+.error-message {
+    background-color: var(--error-color);
+    color: white;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 4px;
+    text-align: center;
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 @media (max-width: 600px) {
     .container {
         margin: 1rem;

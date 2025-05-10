@@ -4,22 +4,42 @@ const SHEET_NAME = 'ErrorReports';
 // Initialize Google API
 async function initGoogleAPI() {
     try {
-        await gapi.load('client', async () => {
-            await gapi.client.init({
-                apiKey: CONFIG.apiKey,
-                clientId: CONFIG.clientId,
-                discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
-                scope: 'https://www.googleapis.com/auth/spreadsheets'
-            });
-
-            // Listen for sign-in state changes
-            gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
-            // Handle initial sign-in state
-            updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+        // Load the Google API client library
+        await new Promise((resolve, reject) => {
+            gapi.load('client', resolve);
         });
+
+        // Initialize the client
+        await gapi.client.init({
+            apiKey: CONFIG.apiKey,
+            clientId: CONFIG.clientId,
+            discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
+            scope: 'https://www.googleapis.com/auth/spreadsheets'
+        });
+
+        // Initialize auth2
+        await new Promise((resolve, reject) => {
+            gapi.auth2.init({
+                client_id: CONFIG.clientId
+            }).then(resolve, reject);
+        });
+
+        // Listen for sign-in state changes
+        gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+        // Handle initial sign-in state
+        updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
     } catch (error) {
         console.error('Error initializing Google API:', error);
+        showError('Failed to initialize Google API. Please refresh the page and try again.');
     }
+}
+
+// Show error message to user
+function showError(message) {
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'error-message';
+    errorDiv.textContent = message;
+    document.querySelector('.container').prepend(errorDiv);
 }
 
 // Update UI based on sign-in status
@@ -29,7 +49,10 @@ function updateSigninStatus(isSignedIn) {
     } else {
         console.log('User is not signed in');
         // Sign in the user
-        gapi.auth2.getAuthInstance().signIn();
+        gapi.auth2.getAuthInstance().signIn().catch(error => {
+            console.error('Error signing in:', error);
+            showError('Failed to sign in. Please try again.');
+        });
     }
 }
 
