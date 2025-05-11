@@ -22,27 +22,6 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Debug - Check secrets
-        run: |
-          echo "Checking if secrets are set..."
-          if [ -n "${{ secrets.GOOGLE_API_KEY }}" ]; then
-            echo "✅ GOOGLE_API_KEY is set"
-            echo "API Key length: ${#GOOGLE_API_KEY}"
-            echo "API Key starts with AIza: ${{ startsWith(secrets.GOOGLE_API_KEY, 'AIza') }}"
-          else
-            echo "❌ GOOGLE_API_KEY is not set"
-          fi
-          if [ -n "${{ secrets.GOOGLE_CLIENT_ID }}" ]; then
-            echo "✅ GOOGLE_CLIENT_ID is set"
-          else
-            echo "❌ GOOGLE_CLIENT_ID is not set"
-          fi
-          if [ -n "${{ secrets.GOOGLE_SPREADSHEET_ID }}" ]; then
-            echo "✅ GOOGLE_SPREADSHEET_ID is set"
-          else
-            echo "❌ GOOGLE_SPREADSHEET_ID is not set"
-          fi
-
       - name: Replace environment variables
         run: |
           # Create a temporary file
@@ -53,9 +32,9 @@ jobs:
           grep -A 5 "const CONFIG" index.html.tmp
           
           # Replace environment variables
-          sed -i "s/{{ GOOGLE_API_KEY }}/${{secrets.GOOGLE_API_KEY}}/g" index.html.tmp
-          sed -i "s/{{ GOOGLE_CLIENT_ID }}/${{secrets.GOOGLE_CLIENT_ID}}/g" index.html.tmp
-          sed -i "s/{{ GOOGLE_SPREADSHEET_ID }}/${{secrets.GOOGLE_SPREADSHEET_ID}}/g" index.html.tmp
+          sed -i "s/{{GOOGLE_API_KEY}}/${{secrets.GOOGLE_API_KEY}}/g" index.html.tmp
+          sed -i "s/{{GOOGLE_CLIENT_ID}}/${{secrets.GOOGLE_CLIENT_ID}}/g" index.html.tmp
+          sed -i "s/{{GOOGLE_SPREADSHEET_ID}}/${{secrets.GOOGLE_SPREADSHEET_ID}}/g" index.html.tmp
           
           # Debug - Show replaced content (without showing actual values)
           echo "Replaced content:"
@@ -72,6 +51,27 @@ jobs:
           
           # Move the temporary file back
           mv index.html.tmp index.html
+      
+      - name: Debug - Check secrets
+        run: |
+          echo "Checking if secrets are set..."
+          if [ -n "${{secrets.GOOGLE_API_KEY}}" ]; then
+            echo "✅ GOOGLE_API_KEY is set"
+            echo "API Key length: ${#GOOGLE_API_KEY}"
+            echo "API Key starts with AIza: ${{startsWith(secrets.GOOGLE_API_KEY, 'AIza')}}"
+          else
+            echo "❌ GOOGLE_API_KEY is not set"
+          fi
+          if [ -n "${{secrets.GOOGLE_CLIENT_ID}}" ]; then
+            echo "✅ GOOGLE_CLIENT_ID is set"
+          else
+            echo "❌ GOOGLE_CLIENT_ID is not set"
+          fi
+          if [ -n "${{secrets.GOOGLE_SPREADSHEET_ID}}" ]; then
+            echo "✅ GOOGLE_SPREADSHEET_ID is set"
+          else
+            echo "❌ GOOGLE_SPREADSHEET_ID is not set"
+          fi
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
