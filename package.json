@@ -1,0 +1,12 @@
+{
+  "name": "error-reporting-app",
+  "version": "1.0.0",
+  "description": "A simple error reporting application with Google Sheets integration",
+  "main": "index.html",
+  "scripts": {
+    "start": "serve ."
+  },
+  "dependencies": {
+    "serve": "^14.2.0"
+  }
+} 

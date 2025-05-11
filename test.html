@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deployment Test</title>
+</head>
+<body>
+    <h1>Deployment Test</h1>
+    <p>If you can see this, the deployment is working.</p>
+    <script>
+        // Test if config.js exists
+        fetch('config.js')
+            .then(response => {
+                if (response.ok) {
+                    document.body.innerHTML += '<p style="color: green;">config.js is present</p>';
+                } else {
+                    document.body.innerHTML += '<p style="color: red;">config.js is missing</p>';
+                }
+            })
+            .catch(error => {
+                document.body.innerHTML += `<p style="color: red;">Error checking config.js: ${error}</p>`;
+            });
+    </script>
+</body>
+</html> 
