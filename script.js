@@ -20,6 +20,9 @@ console.log('Configuration loaded:', {
 // Initialize Google API
 async function initGoogleAPI() {
     try {
+
+        console.log(CONFIG.apiKey);
+        
         // Validate required configuration
         if (!CONFIG.apiKey || !CONFIG.clientId || !CONFIG.spreadsheetId) {
             console.error('Missing configuration:', {
