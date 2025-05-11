@@ -8,11 +8,25 @@ if (typeof CONFIG === 'undefined') {
     throw new Error('Configuration not found');
 }
 
+// Debug configuration
+console.log('Configuration loaded:', {
+    hasApiKey: !!CONFIG.apiKey,
+    hasClientId: !!CONFIG.clientId,
+    hasSpreadsheetId: !!CONFIG.spreadsheetId,
+    clientIdLength: CONFIG.clientId ? CONFIG.clientId.length : 0,
+    clientIdPrefix: CONFIG.clientId ? CONFIG.clientId.substring(0, 10) + '...' : 'none'
+});
+
 // Initialize Google API
 async function initGoogleAPI() {
     try {
         // Validate required configuration
         if (!CONFIG.apiKey || !CONFIG.clientId || !CONFIG.spreadsheetId) {
+            console.error('Missing configuration:', {
+                apiKey: !!CONFIG.apiKey,
+                clientId: !!CONFIG.clientId,
+                spreadsheetId: !!CONFIG.spreadsheetId
+            });
             throw new Error('Missing required configuration');
         }
 
